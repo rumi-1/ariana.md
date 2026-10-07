@@ -1,0 +1,271 @@
+/* Page styles for articles, category hubs, search and About.
+   Built on the Classical tokens in classical.css; see theme.css for the chrome. */
+
+main {
+  padding-top: 32px;
+  padding-bottom: 64px;
+  min-height: 70vh;
+}
+
+.eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-neutral-600);
+  margin: 0 0 var(--space-2);
+}
+.eyebrow a {
+  color: inherit;
+}
+
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.title-row h1 {
+  margin-bottom: 0;
+}
+.title-row + .lede {
+  margin-top: 8px;
+}
+
+/* A short infobox: population, languages, and the like, at the top of the sidebar. */
+.facts {
+  margin: 0;
+  font-size: 13px;
+}
+.facts-row {
+  padding: 8px 0;
+  border-top: 1px solid var(--color-divider);
+}
+.facts-row:first-child {
+  border-top: none;
+}
+.facts-row dt {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-neutral-600);
+}
+.facts-row dd {
+  margin: 2px 0 0;
+}
+
+.lede {
+  color: var(--color-neutral-700);
+  font-size: 17px;
+  max-width: 70ch;
+  margin: 0 0 var(--space-6);
+  text-wrap: pretty;
+}
+
+.empty {
+  color: var(--color-neutral-600);
+  font-style: italic;
+}
+
+/* Card grids (category hubs, featured lists). The .card classes come from classical.css. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+a.card {
+  color: var(--color-text);
+  text-decoration: none;
+  height: 100%;
+}
+a.card:hover {
+  border-color: var(--color-accent);
+}
+a.card .card-title {
+  color: var(--color-accent-700);
+}
+.card .badge {
+  align-self: flex-start;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  color: var(--color-neutral-700);
+}
+
+/* Article layout */
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+}
+@media (min-width: 900px) {
+  .article-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+}
+
+.prose {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 70ch;
+  text-align: justify;
+  hyphens: auto;
+}
+.prose p,
+.prose ul,
+.prose ol {
+  margin: 0 0 1em;
+}
+.prose blockquote {
+  margin: 1.2em 0;
+  padding: 4px 16px;
+  border-inline-start: 3px solid var(--color-accent);
+  color: var(--color-neutral-700);
+}
+.prose h2 {
+  margin-top: 2em;
+}
+
+.aside {
+  font-size: 13px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  align-self: start;
+}
+.aside h2 {
+  font-family: var(--font-body);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-neutral-600);
+  margin: 1.2em 0 0.4em;
+}
+.aside h2:first-child {
+  margin-top: 0;
+}
+.aside ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.aside li {
+  margin: 0 0 6px;
+}
+
+.meta-line {
+  color: var(--color-neutral-600);
+  font-size: 13px;
+  margin: 0 0 24px;
+}
+
+.status-stub {
+  border-inline-start: 3px solid var(--color-accent);
+  background: var(--color-surface);
+  padding: 10px 14px;
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: var(--color-neutral-700);
+}
+
+/* Wiki-links */
+a.wikilink {
+  text-decoration-style: dotted;
+}
+.wikilink-missing {
+  color: var(--color-neutral-600);
+  border-bottom: 1px dashed var(--color-accent);
+}
+
+/* Search */
+.search-input {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+.search-input:hover {
+  border-color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+.search-input:focus-visible {
+  border-color: var(--color-accent);
+  outline-offset: 0;
+}
+
+.result-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.result-list li {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+.result-list a {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 19px;
+}
+.result-list p {
+  margin: 4px 0 0;
+  color: var(--color-neutral-600);
+  font-size: 13px;
+}
+
+/* Figures: hero figures and inline figures. Images sit in a .plate mat. */
+.figure {
+  margin: 0 0 32px;
+}
+.figure img {
+  width: auto;
+  max-width: 100%;
+  max-height: 520px;
+  margin: 0 auto;
+}
+.figure-hero img {
+  width: auto;
+  max-width: 100%;
+  max-height: 520px;
+  margin: 0 auto;
+}
+.figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+.figure figcaption .credit {
+  margin-inline-start: auto;
+  font-style: italic;
+}
+.figure-inline {
+  margin: 1.6em 0;
+}
+.figure-inline img {
+  max-width: min(100%, 560px);
+}
+
+.prose img:not(.figure img) {
+  display: block;
+  max-width: min(100%, 560px);
+  height: auto;
+  margin: 1.6em auto;
+  border: 6px solid var(--color-surface);
+  outline: 1px solid var(--color-divider);
+  filter: sepia(0.22) saturate(0.82) contrast(1.05);
+}

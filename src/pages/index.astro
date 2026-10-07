@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/home.css';
+---
+
+<BaseLayout title="Ariana.md">
+  <section class="hero">
+    <div>
+      <h1 data-i18n="title">The encyclopedia of Afghanistan and its neighbours</h1>
+      <p class="lede" data-i18n="lede">1,240 cited entries on history, art, culture, language and genetics, from the Bronze Age to the present day.</p>
+    </div>
+    <div>
+      <form class="search" action="/search/" method="get" role="search">
+        <label for="q" class="visually-hidden">Search</label>
+        <input id="q" name="q" class="input" type="search" data-i18n-ph="ph" placeholder="Search — e.g. Kushan coinage, landay, Herat" autocomplete="off" />
+        <button class="btn btn-primary" type="submit" data-i18n="search">Search</button>
+      </form>
+      <div class="tags" id="pillars"></div>
+    </div>
+  </section>
+
+  <section id="atlas">
+    <div class="sechead">
+      <h2 data-i18n="atlasH">Atlas</h2>
+      <span class="meta hide-m" data-i18n="atlasHint">Choose an era · drag to pan · scroll or use +/− to zoom · select a region or site</span>
+    </div>
+    <div class="seg eras" id="eras" role="tablist" aria-label="Eras"></div>
+
+    <div class="atlas">
+      <figure>
+        <div class="plate">
+          <div class="mapbox" id="map">
+            <div class="seg mapmode" id="mode" role="radiogroup" aria-label="Map overlay">
+              <span class="seg-opt" data-m="regions" role="radio" tabindex="0">Historical regions</span><span class="seg-opt" data-m="countries" role="radio" tabindex="0">Modern countries</span>
+            </div>
+            <div class="zoom">
+              <button class="btn btn-icon btn-secondary" id="zin" type="button" aria-label="Zoom in">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+              <button class="btn btn-icon btn-secondary" id="zout" type="button" aria-label="Zoom out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+              <button class="btn btn-icon btn-secondary" id="zreset" type="button" aria-label="Reset view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><polyline points="3 3 3 8 8 8" /></svg>
+              </button>
+            </div>
+            <div class="tip" id="tip"></div>
+          </div>
+        </div>
+        <figcaption class="mapcap">
+          <span>Historical regions follow the classical satrapies, c. 330 BCE, after the map "Oriens"; boundaries approximate and blended. Modern borders for reference.</span>
+          <span id="slug"></span>
+        </figcaption>
+      </figure>
+      <aside class="panel" id="panel" aria-live="polite"></aside>
+    </div>
+    <div class="cols" id="cols"></div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2 data-i18n="featured">Featured entry</h2>
+      <span class="meta">art/gandhara.md · revised 2 Oct 2026 · 41 sources</span>
+    </div>
+    <div class="feature">
+      <article class="body">
+        <figure>
+          <div class="plate"><div class="ph" style="height:340px">Plate — standing Bodhisattva, schist</div></div>
+          <figcaption>Standing Bodhisattva, Gandhara, 2nd–3rd century CE. Grey schist.</figcaption>
+        </figure>
+        <div>
+          <h3>Gandharan art</h3>
+          <p>Gandharan art is the Buddhist sculpture and architecture produced in the region of present-day north-western Pakistan and eastern Afghanistan, chiefly between the 1st century BCE and the 5th century CE.</p>
+          <p>It is known for combining Indian Buddhist subjects with forms from the Hellenistic and Roman world. Production peaked under the Kushan empire, whose rulers supported monasteries from Taxila to Hadda.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/search/?q=Gandhara" data-i18n="read">Read entry</a>
+            <a class="btn btn-secondary" href="#" data-i18n="cite">Cite</a>
+            <button class="btn btn-ghost" type="button" id="showG">Show on map</button>
+          </div>
+        </div>
+      </article>
+      <aside>
+        <h6 style="color:var(--color-neutral-600);margin:0 0 6px" data-i18n="recent">Recently revised</h6>
+        <table class="table" style="font-size:13px">
+          <tbody>
+            <tr><td>Minaret of Jam</td><td class="end"><span class="tag tag-accent">+2 sources</span></td></tr>
+            <tr><td>Landay (poetic form)</td><td class="end"><span class="tag tag-neutral">new section</span></td></tr>
+            <tr><td>Haplogroup R1a</td><td class="end"><span class="tag tag-outline" style="color:var(--color-accent-700)">needs citation</span></td></tr>
+            <tr><td>Kushan coinage</td><td class="end"><span class="tag tag-neutral">12 images</span></td></tr>
+          </tbody>
+        </table>
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2 data-i18n="regions">Regions covered</h2>
+      <span class="meta hide-m" data-i18n="regionsHint">Click a row to jump to the atlas</span>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th data-i18n="thRegion">Region</th>
+          <th class="hide-m" data-i18n="thToday">Today</th>
+          <th class="hide-m" data-i18n="thLang">Principal languages</th>
+          <th class="end" data-i18n="thEntries">Entries</th>
+        </tr>
+      </thead>
+      <tbody id="regions"></tbody>
+    </table>
+  </section>
+  <script>
+    import '../scripts/home';
+  </script>
+</BaseLayout>

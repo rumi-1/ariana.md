@@ -1,0 +1,24 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  credit?: string;
+  // Hero figures sit at full width above the body. Inline figures sit in the text column.
+  variant?: 'hero' | 'inline';
+}
+
+const { src, alt, caption, credit, variant = 'inline' } = Astro.props;
+---
+
+<figure class={`figure figure-${variant}`}>
+  <div class="plate">
+    <img {src} {alt} loading={variant === 'hero' ? 'eager' : 'lazy'} decoding="async" />
+  </div>
+  {(caption || credit) && (
+    <figcaption>
+      {caption && <span>{caption}</span>}
+      {credit && <span class="credit">{credit}</span>}
+    </figcaption>
+  )}
+</figure>

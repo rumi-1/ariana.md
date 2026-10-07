@@ -1,0 +1,553 @@
+/* The peoples atlas: a map of ethnolinguistic groups plus a tabbed deep-dive for the selected
+   one. Layout and behaviour follow the Ariana Peoples handoff; chrome (nav, theme, language,
+   footer) is the shared site chrome, not duplicated here. */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 56px;
+  align-items: end;
+  padding-block: 56px 36px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.hero h1 {
+  font-size: 62px;
+  font-weight: 400;
+  line-height: 1.02;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.lede {
+  font-size: 16px;
+  color: var(--color-neutral-700);
+  margin: 0;
+  text-wrap: pretty;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ctrl .input {
+  min-height: 48px;
+  font-size: 16px;
+  padding: 10px 14px;
+}
+.branches {
+  display: flex;
+  flex-wrap: wrap;
+}
+.branches .seg-opt {
+  padding: 7px 12px;
+  font-size: 13px;
+}
+
+.sechead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--color-text);
+  padding-top: 16px;
+  margin: 40px 0 20px;
+}
+.sechead h2 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 40px;
+}
+.meta {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.atlas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 40px;
+}
+.mapbox {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+.mapbox svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.mapbox svg:active {
+  cursor: grabbing;
+}
+
+/* The base map: coastline and a faint political mesh for orientation, nothing more. */
+.country {
+  fill: var(--color-bg);
+  stroke: var(--color-neutral-500);
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.border {
+  fill: none;
+  stroke: var(--color-neutral-700);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Ethnolinguistic ranges: each group's own colour, blended where ranges overlap (deliberately —
+   most places are mixed). Selecting one dims the rest; typing a filter dims non-matches too. */
+.eg path {
+  fill-opacity: 0.74;
+  mix-blend-mode: multiply;
+  stroke: color-mix(in srgb, var(--color-text) 55%, transparent);
+  stroke-width: 0.9;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  transition: fill-opacity 0.2s, stroke-width 0.2s;
+}
+html[data-theme='dark'] .eg path {
+  mix-blend-mode: normal;
+  fill-opacity: 0.62;
+}
+.eg:hover path,
+.eg.hov path {
+  fill-opacity: 0.9;
+  stroke-width: 1.8;
+  stroke: var(--color-text);
+}
+.eg.sel path {
+  fill-opacity: 0.95;
+  stroke-width: 2.6;
+  stroke: var(--color-text);
+}
+.eg.dim path {
+  fill-opacity: 0.14;
+  stroke-opacity: 0.25;
+}
+.picked .eg:not(.sel):not(:hover) path {
+  fill-opacity: 0.38;
+}
+.glabel {
+  font: italic 600 13px var(--font-heading);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  fill: var(--color-text);
+  pointer-events: none;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.glabel.sm {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.glabel.dim {
+  opacity: 0.25;
+}
+html[dir='rtl'] .glabel {
+  font-family: 'Noto Naskh Arabic';
+  font-style: normal;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+
+.zoom {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.zoom .btn {
+  background: var(--color-bg);
+}
+.tip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  padding: 6px 10px;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.tip b {
+  font: 600 16px var(--font-heading);
+  display: block;
+}
+.mapcap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* A small colour swatch, used wherever a group's name appears in a list. */
+.sw {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+
+/* The side panel: a summary card for the selected group, plus the full legend grouped by branch. */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.legend h6 {
+  color: var(--color-neutral-600);
+  margin: 14px 0 4px;
+}
+.legend button {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 6px;
+  border-top: 1px solid var(--color-divider);
+  font-size: 14px;
+  min-height: 36px;
+}
+.legend button:hover {
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+.legend button.sel {
+  box-shadow: inset 2px 0 0 var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+.legend button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+.legend button.dim {
+  opacity: 0.35;
+}
+.legend .p {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+  font-feature-settings: 'tnum';
+}
+.legend .m {
+  grid-column: 2 / 4;
+  font-size: 12px;
+  color: var(--color-accent-700);
+  margin-top: -2px;
+}
+.summary {
+  padding: 18px;
+  gap: 8px;
+}
+.summary p {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* The deep dive, once a group is selected. */
+.dive-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+}
+.dive-head h2 {
+  font-size: 72px;
+  font-weight: 400;
+  line-height: 0.95;
+  margin: 6px 0 0;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 24px;
+  border-top: 1px solid var(--color-text);
+}
+.facts > div {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.facts > div + div {
+  border-inline-start: 1px solid var(--color-divider);
+}
+.facts .k {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.facts .v {
+  font: 400 20px/1.25 var(--font-heading);
+}
+.tabs {
+  display: flex;
+  margin: 28px 0 24px;
+  overflow-x: auto;
+}
+.tabs .seg-opt {
+  flex: 1 0 auto;
+  padding: 10px 16px;
+  font: 600 16px var(--font-heading);
+}
+.dive {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 48px;
+}
+.prose p {
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: justify;
+  hyphens: auto;
+  margin: 0 0 14px;
+  max-width: 72ch;
+}
+.prose h3 {
+  font-size: 26px;
+  font-weight: 400;
+  margin: 22px 0 10px;
+}
+.ph {
+  background: repeating-linear-gradient(135deg, var(--color-neutral-200) 0 9px, var(--color-neutral-300) 9px 10px);
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  font: italic 13px var(--font-body);
+  color: var(--color-neutral-700);
+}
+
+.tribes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 6px 0 16px;
+}
+.tribes .card {
+  padding: 16px;
+  gap: 8px;
+}
+.tribes ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.tribes li {
+  padding: 6px 0;
+  border-top: 1px solid var(--color-divider);
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tribes li span {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font-size: 14px;
+}
+.chain span:last-child {
+  color: var(--color-accent-700);
+  font-weight: 600;
+}
+.chain i {
+  color: var(--color-neutral-500);
+  font-style: normal;
+}
+.taglist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 18px;
+}
+.caution {
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-neutral-700);
+  display: flex;
+  gap: 12px;
+}
+.caution svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--color-accent-700);
+}
+
+.diveside {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.diveside h6 {
+  color: var(--color-neutral-600);
+  margin: 0 0 8px;
+}
+.nbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nbs button {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-divider);
+  border-radius: 999px;
+  font-size: 13px;
+  min-height: 32px;
+  box-sizing: border-box;
+}
+.nbs button:hover {
+  border-color: var(--color-accent);
+}
+.nbs button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.rel a {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--color-divider);
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.rel a:hover {
+  color: var(--color-accent-700);
+}
+.rel a span {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+/* The index shown in the deep-dive section before any group is selected. */
+.index {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+.index button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s;
+}
+.index button:hover {
+  border-color: var(--color-accent);
+}
+.index button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.index .t {
+  font: 400 26px/1.1 var(--font-heading);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.index .b {
+  font-size: 12px;
+  color: var(--color-accent-700);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.index .d {
+  font-size: 13px;
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .hero h1 {
+    font-size: 48px;
+  }
+  .atlas,
+  .dive {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+@media (max-width: 900px) {
+  .hero {
+    padding-block: 28px 24px;
+  }
+  .hero h1 {
+    font-size: 38px;
+  }
+  .sechead h2 {
+    font-size: 30px;
+  }
+  .mapbox {
+    aspect-ratio: 1 / 1;
+  }
+  .dive-head {
+    grid-template-columns: 1fr;
+  }
+  .dive-head h2 {
+    font-size: 48px;
+  }
+  .facts {
+    grid-template-columns: 1fr 1fr;
+  }
+  .facts > div:nth-child(3) {
+    border-inline-start: none;
+  }
+  .facts > div:nth-child(n + 3) {
+    border-top: 1px solid var(--color-divider);
+  }
+  .tabs .seg-opt {
+    min-height: 44px;
+  }
+  .hide-m {
+    display: none;
+  }
+}

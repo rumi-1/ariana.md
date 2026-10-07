@@ -1,0 +1,125 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategory } from '../../lib/categories';
+import { getBacklinks } from '../../lib/articles';
+import Figure from '../../components/Figure.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((entry) => ({
+    params: { category: entry.data.category, slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const category = getCategory(entry.data.category)!;
+const backlinks = await getBacklinks(entry.id);
+
+// Table of contents: only the section headings a reader would scan for.
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const { title, description, aliases, tags, status, lastReviewed, sources, image, hub, facts } = entry.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <p class="eyebrow">
+    <a href="/">Ariana.md</a> / <a href={`/${category.id}/`}>{category.name}</a>
+  </p>
+  <div class="title-row">
+    <h1>{title}</h1>
+    {hub && <span class="tag tag-accent" title="A jumping-off point for a large topic, not a self-contained article">Hub</span>}
+  </div>
+  <p class="lede">{description}</p>
+
+  {status === 'stub' && (
+    <p class="status-stub">
+      This article is a <strong>stub</strong>. It records the basics and needs more research and sources.
+    </p>
+  )}
+
+  {image && <Figure variant="hero" src={image.src} alt={image.alt} caption={image.caption} credit={image.credit} />}
+
+  <div class="article-layout">
+    <article class="prose">
+      <Content />
+
+      {sources.length > 0 && (
+        <section>
+          <h2>Sources</h2>
+          <ol>
+            {sources.map((s) => (
+              <li>{s.url ? <a href={s.url} rel="noopener noreferrer">{s.label}</a> : s.label}</li>
+            ))}
+          </ol>
+        </section>
+      )}
+    </article>
+
+    <aside class="aside" aria-label="Article details">
+      {facts.length > 0 && (
+        <>
+          <h2>At a glance</h2>
+          <dl class="facts">
+            {facts.map((f) => (
+              <div class="facts-row">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </>
+      )}
+
+      <h2>Status</h2>
+      <ul>
+        <li>{status}</li>
+        {lastReviewed && <li>Last reviewed {lastReviewed.toISOString().slice(0, 10)}</li>}
+      </ul>
+
+      {aliases.length > 0 && (
+        <>
+          <h2>Also known as</h2>
+          <ul>
+            {aliases.map((a) => <li>{a}</li>)}
+          </ul>
+        </>
+      )}
+
+      {toc.length > 0 && (
+        <>
+          <h2>On this page</h2>
+          <ul>
+            {toc.map((h) => (
+              <li style={h.depth === 3 ? 'padding-left: 12px' : undefined}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {tags.length > 0 && (
+        <>
+          <h2>Tags</h2>
+          <ul>
+            {tags.map((t) => <li>{t}</li>)}
+          </ul>
+        </>
+      )}
+
+      {backlinks.length > 0 && (
+        <>
+          <h2>Linked from</h2>
+          <ul>
+            {backlinks.map((b) => (
+              <li><a href={`/${b.data.category}/${b.id}/`}>{b.data.title}</a></li>
+            ))}
+          </ul>
+        </>
+      )}
+    </aside>
+  </div>
+</BaseLayout>

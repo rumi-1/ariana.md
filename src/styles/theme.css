@@ -1,0 +1,182 @@
+/* Light and dark themes, RTL typography, and the site chrome (nav, notice, footer).
+   Dark values come from the Ariana Home v3 handoff. Colours are token overrides only. */
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #1b1919;
+  --color-surface: #262424;
+  --color-text: #ece8e6;
+  --color-divider: color-mix(in srgb, #ece8e6 16%, transparent);
+  --color-neutral-100: #252323;
+  --color-neutral-200: #2f2c2c;
+  --color-neutral-300: #3c3939;
+  --color-neutral-400: #555151;
+  --color-neutral-500: #7d7979;
+  --color-neutral-600: #9b9797;
+  --color-neutral-700: #bab6b6;
+  --color-neutral-800: #d7d3d3;
+  --color-neutral-900: #eae7e7;
+  --color-accent: #d29f55;
+  --color-accent-100: #33240f;
+  --color-accent-200: #4a3412;
+  --color-accent-300: #6a4a17;
+  --color-accent-400: #a06f24;
+  --color-accent-500: #c28d41;
+  --color-accent-600: #e1ad66;
+  --color-accent-700: #ecbd7a;
+  --color-accent-800: #facb8d;
+  --color-accent-900: #ffe3bf;
+  --shadow-sm: 0 0 0 1px color-mix(in srgb, #fff 6%, transparent), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 0 0 1px color-mix(in srgb, #fff 6%, transparent), 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 0 0 1px color-mix(in srgb, #fff 8%, transparent), 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme='dark'] .plate {
+  filter: sepia(0.18) saturate(0.8) contrast(1.05) brightness(0.92);
+}
+
+body {
+  transition: background 0.25s, color 0.25s;
+}
+
+a {
+  color: var(--color-accent-700);
+}
+
+a:hover {
+  color: var(--color-accent-600);
+}
+
+/* Theme toggle shows the moon in light mode and the sun in dark mode. */
+#theme svg {
+  display: block;
+}
+#theme .sun {
+  display: none;
+}
+html[data-theme='dark'] #theme .sun {
+  display: block;
+}
+html[data-theme='dark'] #theme .moon {
+  display: none;
+}
+
+/* Right-to-left: Dari and Pashto. Perso-Arabic headings use Noto Naskh Arabic. */
+html[dir='rtl'] body {
+  font-family: 'Noto Naskh Arabic', var(--font-body);
+}
+html[dir='rtl'] h1,
+html[dir='rtl'] h2,
+html[dir='rtl'] h6,
+html[dir='rtl'] .nav-brand {
+  font-family: 'Noto Naskh Arabic', var(--font-heading);
+  letter-spacing: 0;
+}
+
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: 56px;
+}
+
+.nav {
+  padding-inline: 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  border: 0;
+}
+
+.nav-brand {
+  font-size: 22px;
+}
+.nav-brand span {
+  color: var(--color-neutral-500);
+  font-weight: 400;
+}
+
+.navlinks {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.seg-opt.on {
+  color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+.seg-opt.ar {
+  font-family: 'Noto Naskh Arabic';
+}
+
+.site-header {
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.notice {
+  display: none;
+  font-size: 13px;
+  background: var(--color-accent-100);
+  color: var(--color-accent-800);
+  padding: 8px 56px;
+  text-align: center;
+}
+html[dir='rtl'] .notice {
+  display: block;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-divider);
+  margin-top: 56px;
+}
+.site-footer .wrap {
+  padding-block: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--color-neutral-600);
+}
+.site-footer .links {
+  display: flex;
+  gap: 20px;
+}
+.site-footer p {
+  margin: 0;
+  max-width: 70ch;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 8px 12px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  z-index: 10;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+@media (max-width: 900px) {
+  .wrap,
+  .nav,
+  .notice {
+    padding-inline: 20px;
+  }
+  .navlinks {
+    display: none;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

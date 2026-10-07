@@ -1,0 +1,519 @@
+/* Homepage: hero, atlas, featured entry and regions table.
+   Layout and sizes come from the Ariana Home v3 handoff. Every colour and space is a token. */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  gap: 56px;
+  align-items: end;
+  padding-block: 56px 40px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.hero h1 {
+  font-size: 62px;
+  font-weight: 400;
+  line-height: 1.02;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.lede {
+  font-size: 16px;
+  color: var(--color-neutral-700);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.search {
+  display: flex;
+  gap: 8px;
+}
+.search .input {
+  min-height: 48px;
+  font-size: 16px;
+  padding: 10px 14px;
+}
+.search .btn {
+  min-height: 48px;
+  padding-inline: 22px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.tags .tag {
+  color: var(--color-accent-700);
+  border-color: var(--color-accent);
+  padding: 5px 12px;
+  white-space: nowrap;
+}
+
+.sechead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--color-text);
+  padding-top: 16px;
+  margin: 48px 0 20px;
+}
+.sechead h2 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 40px;
+}
+.meta {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+
+.eras {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+}
+.eras .seg-opt {
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 14px;
+  text-align: start;
+}
+.eras .d {
+  font-size: 12px;
+  font-feature-settings: 'tnum';
+  color: var(--color-neutral-600);
+}
+.eras .n {
+  font: 600 16px/1.1 var(--font-heading);
+  white-space: nowrap;
+}
+.eras .on .d,
+.eras .on .n {
+  color: var(--color-accent-700);
+}
+
+.atlas {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.mapbox {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+.mapbox svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+.mapbox svg:active {
+  cursor: grabbing;
+}
+
+.country {
+  fill: var(--color-bg);
+  stroke: var(--color-neutral-500);
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.2s;
+  pointer-events: none;
+}
+.country.focus {
+  fill: var(--color-neutral-200);
+}
+.afg {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.clabel {
+  font: 11px var(--font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  fill: var(--color-neutral-600);
+  pointer-events: none;
+}
+html[dir='rtl'] .clabel {
+  font-family: 'Noto Naskh Arabic';
+  letter-spacing: 0;
+  font-size: 13px;
+}
+
+/* Historical regions: the Achaemenid satrapies, as filled shapes blended into the base map
+   (multiply in light mode, since a dark land fill would otherwise muddy the colours; plain
+   alpha in dark mode) plus an invisible-until-hovered boundary line that carries the
+   interaction. Each satrapy's fill colour is computed from its longitude at draw time. */
+.region {
+  fill-opacity: 0.34;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: fill-opacity 0.2s;
+}
+.region.hov {
+  fill-opacity: 0.5;
+}
+.region.sel {
+  fill-opacity: 0.62;
+}
+html[data-theme='dark'] .region {
+  mix-blend-mode: normal;
+  fill-opacity: 0.32;
+}
+html[data-theme='dark'] .region.hov {
+  fill-opacity: 0.46;
+}
+html[data-theme='dark'] .region.sel {
+  fill-opacity: 0.58;
+}
+.rline {
+  fill: transparent;
+  pointer-events: all;
+  stroke: var(--color-neutral-700);
+  stroke-opacity: 0.55;
+  stroke-width: 1.3;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+  transition: stroke-opacity 0.2s;
+}
+.rline:hover,
+.rline.sel {
+  stroke-opacity: 1;
+  stroke-width: 2.2;
+}
+html[data-theme='dark'] .rline {
+  stroke: var(--color-text);
+  stroke-opacity: 0.7;
+}
+html[data-theme='dark'] .rline:hover,
+html[data-theme='dark'] .rline.sel {
+  stroke-opacity: 1;
+}
+.rlabel {
+  font: italic 600 13px var(--font-heading);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  fill: var(--color-neutral-800);
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-opacity: 0.55;
+}
+html[dir='rtl'] .rlabel {
+  font-family: 'Noto Naskh Arabic';
+  letter-spacing: 0;
+  font-style: normal;
+  font-size: 14px;
+}
+
+/* The historical-regions / modern-countries toggle, pinned over the top-left of the map. */
+.mapmode {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 12px;
+  background: var(--color-bg);
+  z-index: 1;
+}
+.mapmode .seg-opt {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-inline-end: 6px;
+  vertical-align: baseline;
+}
+
+.site {
+  cursor: pointer;
+}
+.site circle {
+  fill: var(--color-bg);
+  stroke: var(--color-neutral-500);
+  stroke-width: 1;
+  transition: all 0.2s;
+}
+.site text {
+  font: 600 12px var(--font-heading);
+  font-feature-settings: 'tnum';
+  fill: var(--color-neutral-600);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+.site.off {
+  opacity: 0.35;
+}
+.site.on circle {
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+}
+.site.on text {
+  fill: var(--color-accent-700);
+}
+.site.sel circle {
+  fill: var(--color-accent-100);
+  stroke-width: 2.2;
+}
+.site:hover circle {
+  stroke: var(--color-accent-600);
+}
+.site:focus-visible {
+  outline: none;
+}
+.site:focus-visible circle {
+  stroke: var(--color-accent);
+  stroke-width: 2.2;
+}
+
+.zoom {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.zoom .btn {
+  background: var(--color-bg);
+}
+
+.tip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
+  padding: 6px 10px;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.tip b {
+  font: 600 15px var(--font-heading);
+  display: block;
+}
+
+.mapcap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.panel h2 {
+  font-size: 38px;
+  font-weight: 400;
+  margin: 0;
+}
+.panel .date {
+  font-size: 14px;
+  font-feature-settings: 'tnum';
+  color: var(--color-accent-700);
+}
+.panel > p {
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: justify;
+  hyphens: auto;
+  margin: 0;
+}
+
+.sitelist button {
+  all: unset;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 6px;
+  border-top: 1px solid var(--color-divider);
+  font-size: 14px;
+}
+.sitelist button:hover {
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+.sitelist button.sel {
+  box-shadow: inset 2px 0 0 var(--color-accent);
+}
+.sitelist button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+.sitelist .i {
+  font: 600 15px var(--font-heading);
+  color: var(--color-accent-700);
+  font-feature-settings: 'tnum';
+}
+.sitelist .t {
+  font-size: 12px;
+  color: var(--color-neutral-600);
+}
+.sitecard {
+  padding: 14px;
+  gap: 6px;
+}
+.sitecard .btn {
+  align-self: flex-start;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 32px;
+}
+.cols > div {
+  padding: 16px 20px 0;
+  border-top: 1px solid var(--color-text);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cols > div + div {
+  border-inline-start: 1px solid var(--color-divider);
+}
+.cols .t {
+  font: 400 24px/1.15 var(--font-heading);
+}
+.cols .d {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-neutral-700);
+}
+.cols .card-kicker {
+  color: var(--color-accent-700);
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 48px;
+}
+.feature .body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 28px;
+}
+.feature .body p {
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: justify;
+  hyphens: auto;
+}
+.feature .body h3 {
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0 0 12px;
+}
+.feature .actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ph {
+  background: repeating-linear-gradient(135deg, var(--color-neutral-200) 0 9px, var(--color-neutral-300) 9px 10px);
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  font: italic 13px var(--font-body);
+  color: var(--color-neutral-700);
+}
+
+.table tbody tr {
+  cursor: pointer;
+}
+.table tbody tr.hl {
+  background: var(--color-accent-100);
+}
+.rname {
+  font: 600 18px var(--font-heading);
+}
+.table td.num {
+  text-align: end;
+  font-feature-settings: 'tnum';
+}
+.table .end {
+  text-align: end;
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .hero h1 {
+    font-size: 48px;
+    max-width: 800px;
+  }
+  .atlas {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .feature {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-block: 28px 24px;
+  }
+  .hero h1 {
+    font-size: 38px;
+  }
+  .sechead h2 {
+    font-size: 30px;
+  }
+  .atlas,
+  .feature,
+  .feature .body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .mapbox {
+    aspect-ratio: 1 / 1;
+  }
+  .cols {
+    grid-template-columns: 1fr;
+    margin-top: 16px;
+  }
+  .cols > div + div {
+    border-inline-start: none;
+  }
+  .cols > div {
+    border-top: 1px solid var(--color-divider);
+    padding: 12px 0;
+  }
+  .eras .seg-opt {
+    min-height: 44px;
+  }
+  .hide-m {
+    display: none;
+  }
+}

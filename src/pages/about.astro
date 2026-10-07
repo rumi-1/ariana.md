@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="What Ariana.md covers, and how it is written.">
+  <h1>About Ariana.md</h1>
+  <p class="lede">
+    “Ariana” is the old Greek name for the broad highland region of Afghanistan and its neighbours. This wiki
+    covers that region and the wider land of Khorasan: its geography, histories, peoples, languages, genetics,
+    and notable figures.
+  </p>
+
+  <div class="prose">
+    <h2>How articles are written</h2>
+    <ul>
+      <li><strong>Sourced.</strong> Every factual claim should trace to a source listed at the bottom of the page.</li>
+      <li><strong>Marked honestly.</strong> A <em>stub</em> is a short placeholder. A <em>draft</em> has been written but not checked. Only <em>published</em> articles have been reviewed against their sources.</li>
+      <li><strong>Plural names.</strong> Places, peoples, and people often have several names in different languages. Articles list them under “Also known as” and say which name is used where.</li>
+      <li><strong>Contested topics stay contested.</strong> Where historians, linguists, or geneticists disagree, the article says so and presents the disagreement rather than picking a side.</li>
+    </ul>
+
+    <h2>On genetics</h2>
+    <p>
+      Genetic data can say a great deal about population movement and mixing, but it cannot by itself define an
+      ethnic group, a language, or a nation. Sampling in this region is uneven, and studies are often read for
+      political purposes. The genetics section aims to report what the data show, what it does not show, and how
+      confident the field is.
+    </p>
+
+    <h2>Linking</h2>
+    <p>
+      Words in double square brackets, such as <code>[[Khorasan]]</code>, become links to the matching article.
+      A link shown in red-dashed text points to an article that does not exist yet. Each article also lists
+      “Linked from” in its sidebar, so you can follow connections in both directions.
+    </p>
+
+    <h2>Contributing</h2>
+    <p>
+      Articles are Markdown files in <code>src/content/articles/</code>. Each has a short frontmatter block with
+      its title, category, aliases, and sources. Corrections and new sources are welcome.
+    </p>
+  </div>
+</BaseLayout>

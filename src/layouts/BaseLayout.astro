@@ -1,0 +1,92 @@
+---
+import '../styles/classical.css';
+import '../styles/theme.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'The encyclopedia of Afghanistan and its neighbours: history, art, culture, language and genetics.' } = Astro.props;
+const fullTitle = title === 'Ariana.md' ? title : `${title} · Ariana.md`;
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Set the theme before first paint so dark-mode readers never see a light flash. -->
+    <script is:inline>
+      (() => {
+        try {
+          const q = new URLSearchParams(location.search).get('theme');
+          const stored = localStorage.getItem('ariana.theme');
+          const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = q || stored || (dark ? 'dark' : 'light');
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="notice" data-i18n="notice">Entries are being translated. English is shown where no translation exists yet.</div>
+
+    <header class="site-header">
+      <nav class="nav" aria-label="Main">
+        <a class="nav-brand" href="/">Ariana<span>.md</span></a>
+        <div class="navlinks">
+          <a href="#" data-i18n="browse">Browse</a>
+          <a href="#" data-i18n="timeline">Timeline</a>
+          <a href="/#atlas" data-i18n="atlas">Atlas</a>
+          <a href="/peoples/" data-i18n="peoplesNav">Peoples</a>
+          <a href="#" data-i18n="sources">Sources</a>
+          <a href="#" data-i18n="contribute">Contribute</a>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Language" id="lang">
+          <span class="seg-opt on" data-l="en" role="radio" aria-checked="true" tabindex="0">EN</span><span class="seg-opt ar" data-l="fa" role="radio" aria-checked="false" tabindex="0">دری</span><span class="seg-opt ar" data-l="ps" role="radio" aria-checked="false" tabindex="0">پښتو</span>
+        </div>
+        <button class="btn btn-icon btn-secondary" id="theme" type="button" aria-label="Toggle dark mode">
+          <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
+          <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main id="content">
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <span data-i18n="foot">Every entry is a plain-text file with its sources. Read, cite or propose a correction.</span>
+        <span class="links">
+          <a href="#" data-i18n="viewsrc">View source</a>
+          <a href="#" data-i18n="howcite">How to cite</a>
+          <a href="#" data-i18n="contribute">Contribute</a>
+        </span>
+      </div>
+    </footer>
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

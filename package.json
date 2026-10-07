@@ -1,0 +1,25 @@
+{
+  "name": "ariana.md",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A wiki about Ariana: Afghanistan, Khorasan, and the surrounding regions.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.2",
+    "astro": "^7.3.6",
+    "d3": "^7.9.0",
+    "gray-matter": "^4.0.3",
+    "minisearch": "^7.2.0",
+    "topojson-client": "^3.1.0",
+    "unist-util-visit": "^5.0.0",
+    "world-atlas": "^2.0.2"
+  }
+}

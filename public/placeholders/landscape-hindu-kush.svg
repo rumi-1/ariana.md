@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Placeholder landscape of the Hindu Kush">
+  <rect width="1600" height="900" fill="#dcd5c4"/>
+  <path d="M0 600 L320 450 L800 540 L1280 300 L1600 450 V900 H0Z" fill="#c7bea9"/>
+  <rect x="2" y="2" width="1596" height="896" fill="none" stroke="#9c9480" stroke-dasharray="8 6" stroke-width="3"/>
+  <text x="50%" y="46%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="57" fill="#5b5548">PLACEHOLDER</text>
+  <text x="50%" y="56%" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#5b5548">Landscape: Hindu Kush</text>
+</svg>

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getArticlesIn } from '../../lib/articles';
+import '../../styles/peoples.css';
+
+// Groups already profiled on the atlas below (src/lib/peoples-data.ts), by their article slug.
+// Everything else written under "peoples" — the Pashtun tribal structure, Qizilbash — doesn't
+// have a place on the map yet, so it's listed separately rather than left unreachable.
+const COVERED_SLUGS = [
+  'pashtuns', 'tajiks', 'hazaras', 'aimaq', 'baloch',
+  'uzbeks-afghanistan', 'turkmen', 'nuristanis', 'pashai',
+];
+const allPeoples = await getArticlesIn('peoples');
+const extra = allPeoples.filter((a) => !COVERED_SLUGS.includes(a.id));
+---
+
+<BaseLayout
+  title="Peoples"
+  description="Eighteen ethnolinguistic groups between the Caspian and the Indus, mapped and profiled."
+>
+  <section class="hero">
+    <div>
+      <h6 style="color:var(--color-accent-700);margin:0 0 8px">Peoples</h6>
+      <h1>The peoples of Ariana today</h1>
+      <p class="lede">Eighteen ethnolinguistic groups between the Caspian and the Indus. Shaded areas show where a group forms the majority or a large share of the population; most places are mixed, and the overlaps are deliberate.</p>
+    </div>
+    <div class="ctrl">
+      <label for="q" class="visually-hidden">Find a people, tribe, or language</label>
+      <input class="input" id="q" placeholder="Find a people, tribe or language — e.g. Popalzai, Wakhi" autocomplete="off" />
+      <div class="seg branches" id="branches"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead">
+      <h2>Map of peoples</h2>
+      <span class="meta hide-m">Select a group on the map or in the list · drag to pan · scroll to zoom</span>
+    </div>
+    <div class="atlas">
+      <figure>
+        <div class="plate" style="border-width:6px">
+          <div class="mapbox" id="map">
+            <div class="zoom">
+              <button class="btn btn-icon btn-secondary" id="zin" type="button" aria-label="Zoom in">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+              <button class="btn btn-icon btn-secondary" id="zout" type="button" aria-label="Zoom out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /></svg>
+              </button>
+              <button class="btn btn-icon btn-secondary" id="zreset" type="button" aria-label="Reset view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><polyline points="3 3 3 8 8 8" /></svg>
+              </button>
+            </div>
+            <div class="tip" id="tip"></div>
+          </div>
+        </div>
+        <figcaption class="mapcap">
+          <span>Estimated, generalised extents after published ethnolinguistic surveys. Afghanistan has had no full census since 1979; boundaries are indicative, not surveyed.</span>
+          <span>peoples atlas</span>
+        </figcaption>
+      </figure>
+      <aside class="side" id="side"></aside>
+    </div>
+  </section>
+
+  <section id="dive"></section>
+
+  {extra.length > 0 && (
+    <section>
+      <div class="sechead">
+        <h2>Also on this wiki</h2>
+        <span class="meta hide-m">Not yet on the map above</span>
+      </div>
+      <p class="lede" style="font-size:14px;margin-bottom:20px">
+        These peoples entries exist as regular articles but aren't profiled in the atlas above yet — including the detailed Pashtun tribal structure.
+      </p>
+      <ul class="card-grid">
+        {extra.map((a) => <ArticleCard article={a} showCategory={false} />)}
+      </ul>
+    </section>
+  )}
+  <script>
+    import '../../scripts/peoples';
+  </script>
+</BaseLayout>

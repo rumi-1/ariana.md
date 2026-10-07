@@ -1,0 +1,20 @@
+---
+import type { Article } from '../lib/articles';
+
+interface Props {
+  article: Article;
+  showCategory?: boolean;
+}
+
+const { article, showCategory = false } = Astro.props;
+const href = `/${article.data.category}/${article.id}/`;
+---
+
+<li>
+  <a class="card" href={href}>
+    {showCategory && <span class="card-kicker">{article.data.category}</span>}
+    <span class="card-title">{article.data.title}</span>
+    <span class="card-body">{article.data.description}</span>
+    {article.data.status === 'stub' && <span class="card-meta">Stub</span>}
+  </a>
+</li>
